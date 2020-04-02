@@ -13,7 +13,8 @@ fc_apf.ttt is for fc_apf.m.
 
 # Logs
 ## 03/04/2020
-Update the MATLAB scirpt fc_apf.m and Path.m to fix the matrix exceeding issues.
+Update the MATLAB scirpt fc_apf.m and Path.m to fix the matrix exceeding issues. \
+Rename folders.
 
 ## 02/04/2020
 Update obstacle avoidance function. \
@@ -21,6 +22,7 @@ New function is included in the fc_apf.m and corresponding V-REP scene. \
 Bug: Matrix exceeds when nearly reaching the destination
 
 ## 30/03/2020
-Update formation control algorithm and corresponding V-REP scene. \
-Create repository.
+Create repository. \
+Update formation control algorithm and corresponding V-REP scene.
+
 
