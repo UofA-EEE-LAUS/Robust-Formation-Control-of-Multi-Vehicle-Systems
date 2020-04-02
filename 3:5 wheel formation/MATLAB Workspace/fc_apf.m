@@ -9,8 +9,8 @@ vrep.simxFinish(-1);
 clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
 
 %Formation Setting
-u = [2;0;4;0;4];
-v = [2;0;4;4;0];
+u = [-2;2;0;-2;2];
+v = [-2;2;0;2;-2];
 
 
 %clientID is -1 if the connection to the server was NOT possible
@@ -46,27 +46,27 @@ if (clientID>-1)
     [returnCode,Cuboid15]=vrep.simxGetObjectHandle(clientID,strcat('Cuboid15'),vrep.simx_opmode_blocking);
     [returnCode,cuboid_5]=vrep.simxGetObjectPosition(clientID,Cuboid15,-1,vrep.simx_opmode_blocking);
     
-    %Get formation
-    [destination, roverID] = formation_5_LUA(position(:,1),position(:,2),u,v);
+%     %Get formation
+%     [destination, roverID] = formation_5_LUA(position(:,1),position(:,2),u,v);
     
-    %obstacle (raw for No., column for x/y coordinate)
-    obstacle = [cuboid_1(1), cuboid_2(1), cuboid_3(1),cuboid_4(1), cuboid_5(1);
-        cuboid_1(2), cuboid_2(2), cuboid_3(2), cuboid_4(2), cuboid_5(2)];
-    obstacle_1 = [obstacle(1,:), position([2 3 4 5],1)';
-        obstacle(2,:), position([2 3 4 5],2)'];
-    obstacle_2 = [obstacle(1,:), position([1 3 4 5],1)';
-        obstacle(2,:), position([1 3 4 5],2)'];
-    obstacle_3 = [obstacle(1,:), position([1 2 4 5],1)';
-        obstacle(2,:), position([1 2 4 5],2)'];
-    obstacle_4 = [obstacle(1,:), position([1 2 3 5],1)';
-        obstacle(2,:), position([1 2 3 5],2)'];
-    obstacle_5 = [obstacle(1,:), position([1 2 3 4],1)';
-        obstacle(2,:), position([1 2 3 4],2)'];
-    
-    
+%     %obstacle (raw for No., column for x/y coordinate)
+%     obstacle = [cuboid_1(1), cuboid_2(1), cuboid_3(1),cuboid_4(1), cuboid_5(1);
+%         cuboid_1(2), cuboid_2(2), cuboid_3(2), cuboid_4(2), cuboid_5(2)];
+%     obstacle_1 = [obstacle(1,:), position([2 3 4 5],1)';
+%         obstacle(2,:), position([2 3 4 5],2)'];
+%     obstacle_2 = [obstacle(1,:), position([1 3 4 5],1)';
+%         obstacle(2,:), position([1 3 4 5],2)'];
+%     obstacle_3 = [obstacle(1,:), position([1 2 4 5],1)';
+%         obstacle(2,:), position([1 2 4 5],2)'];
+%     obstacle_4 = [obstacle(1,:), position([1 2 3 5],1)';
+%         obstacle(2,:), position([1 2 3 5],2)'];
+%     obstacle_5 = [obstacle(1,:), position([1 2 3 4],1)';
+%         obstacle(2,:), position([1 2 3 4],2)'];
     
     
-    for i = 1:20
+    
+    
+    for i = 1:30
         %Get 5 rovers' position
         [returnCode,rover_0]=vrep.simxGetObjectHandle(clientID,strcat('rover'),vrep.simx_opmode_blocking);
         [returnCode,position_0]=vrep.simxGetObjectPosition(clientID,rover_0,-1,vrep.simx_opmode_blocking);
@@ -80,6 +80,9 @@ if (clientID>-1)
         [returnCode,position_4]=vrep.simxGetObjectPosition(clientID,rover_4,-1,vrep.simx_opmode_blocking);
         
         position = [position_0; position_1; position_2; position_3; position_4];
+        
+        %Get formation
+        [destination, roverID] = formation_5_LUA(position(:,1),position(:,2),u,v);
         
         %obstacle (raw for No., column for x/y coordinate)
         obstacle_1 = [obstacle(1,:), position([2 3 4 5],1)';
@@ -106,7 +109,7 @@ if (clientID>-1)
         path_5 = Path([position_4(1);position_4(2)],[destination(roverID(5),1);destination(roverID(5),2)],obstacle_5);
         
         %Running rovers
-        a=[path_1(1,5),path_1(2,5),0,path_2(1,5),path_2(2,5),0,path_3(1,5),path_3(2,5),0,path_4(1,5),path_4(2,5),0,path_5(1,5),path_5(2,5),0];
+        a=[path_1(1,1),path_1(2,1),0,path_2(1,1),path_2(2,1),0,path_3(1,1),path_3(2,1),0,path_4(1,1),path_4(2,1),0,path_5(1,1),path_5(2,1),0];
         packedData=vrep.simxPackFloats(a);
         [returnCode]=vrep.simxWriteStringStream(clientID,'stringname',packedData,vrep.simx_opmode_oneshot);
         
