@@ -4,7 +4,7 @@
 <img src="https://img.shields.io/badge/platform-MacOS 10.15.4-blue" alt="platform">
 </p>
 
-# 3WD-omni-direction-rover-stepper 
+# Robust Formation Control of Multi Vehicle Systems
 
 <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/ca/University-of-Adelaide-Logo.svg/220px-University-of-Adelaide-Logo.svg.png" alt="uni logo">
 
