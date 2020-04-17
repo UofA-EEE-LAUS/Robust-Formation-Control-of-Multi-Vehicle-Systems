@@ -40,7 +40,7 @@ end
 
 for i = 1:n
     for j = 1:n
-        if assignment(j,i)==1
+        if assignment(i,j)==1
             roverID(j) = i;
         end
     end

@@ -46,27 +46,15 @@ if (clientID>-1)
     [returnCode,Cuboid15]=vrep.simxGetObjectHandle(clientID,strcat('Cuboid15'),vrep.simx_opmode_blocking);
     [returnCode,cuboid_5]=vrep.simxGetObjectPosition(clientID,Cuboid15,-1,vrep.simx_opmode_blocking);
     
-%     %Get formation
-%     [destination, roverID] = formation_5_LUA(position(:,1),position(:,2),u,v);
+    %Get formation
+    [destination, roverID] = formation_5_LUA(position(:,1),position(:,2),u,v);
     
-%     %obstacle (raw for No., column for x/y coordinate)
-%     obstacle = [cuboid_1(1), cuboid_2(1), cuboid_3(1),cuboid_4(1), cuboid_5(1);
-%         cuboid_1(2), cuboid_2(2), cuboid_3(2), cuboid_4(2), cuboid_5(2)];
-%     obstacle_1 = [obstacle(1,:), position([2 3 4 5],1)';
-%         obstacle(2,:), position([2 3 4 5],2)'];
-%     obstacle_2 = [obstacle(1,:), position([1 3 4 5],1)';
-%         obstacle(2,:), position([1 3 4 5],2)'];
-%     obstacle_3 = [obstacle(1,:), position([1 2 4 5],1)';
-%         obstacle(2,:), position([1 2 4 5],2)'];
-%     obstacle_4 = [obstacle(1,:), position([1 2 3 5],1)';
-%         obstacle(2,:), position([1 2 3 5],2)'];
-%     obstacle_5 = [obstacle(1,:), position([1 2 3 4],1)';
-%         obstacle(2,:), position([1 2 3 4],2)'];
+    %obstacle (raw for No., column for x/y coordinate)
+    obstacle = [cuboid_1(1), cuboid_2(1), cuboid_3(1),cuboid_4(1), cuboid_5(1);
+        cuboid_1(2), cuboid_2(2), cuboid_3(2), cuboid_4(2), cuboid_5(2)];
+
     
-    
-    
-    
-    for i = 1:30
+    for i = 1:20
         %Get 5 rovers' position
         [returnCode,rover_0]=vrep.simxGetObjectHandle(clientID,strcat('rover'),vrep.simx_opmode_blocking);
         [returnCode,position_0]=vrep.simxGetObjectPosition(clientID,rover_0,-1,vrep.simx_opmode_blocking);
@@ -112,6 +100,9 @@ if (clientID>-1)
         a=[path_1(1,1),path_1(2,1),0,path_2(1,1),path_2(2,1),0,path_3(1,1),path_3(2,1),0,path_4(1,1),path_4(2,1),0,path_5(1,1),path_5(2,1),0];
         packedData=vrep.simxPackFloats(a);
         [returnCode]=vrep.simxWriteStringStream(clientID,'stringname',packedData,vrep.simx_opmode_oneshot);
+        
+        %Judging
+        
         
     end
     
