@@ -1,4 +1,4 @@
-function [position,roverID] = formation(x0,y0,u,v)
+function [position,roverID] = formation_5(x0,y0,u,v)
 
 %Initialisation
 alpha0 = [0;0;0];
@@ -32,12 +32,20 @@ for i = 1:n
         if assignment(i,j)==1
             x1(i)=x0(j);
             y1(i)=y0(j);
-            roverID(i) = j-1; 
             alpha1(i)=alpha0(j);
             beta1(i)=beta0(j);
         end
     end
 end
+
+for i = 1:n
+    for j = 1:n
+        if assignment(i,j)==1
+            roverID(j) = i;
+        end
+    end
+end
+
 
 %Initialisation
 xs=x1;

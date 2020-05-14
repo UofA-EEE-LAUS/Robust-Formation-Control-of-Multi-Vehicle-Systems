@@ -8,19 +8,8 @@ vrep.simxFinish(-1);
 %establishes connection to v-rep simulation on port 19999
 clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
 
-%Formation Setting
-% %Straight Line
-% u = [-2;-1;0;1;2];
-% v = [-2;-1;0;1;2];
-% %Square
-% u = [-2;2;0;-2;2];
-% v = [-2;-2;0;2;2];
-% %Circle
-% u = [0;-3;3;-2;2];
-% v = [5;2;2;-3;3];
-%Triangle
-u = [-1;1;0;-0.5;0.5];
-v = [0;0;3;2;2];
+
+
 
 
 %clientID is -1 if the connection to the server was NOT possible
@@ -29,6 +18,12 @@ if (clientID>-1)
     elapsedTime = 1;
     
     %------------------------------CODE HERE------------------------------%
+    
+    %------------------------------3 Rovers-------------------------------%
+    
+    %Straight Line
+    u = [1;-1;0];
+    v = [0;0;0];
     
     %Get 5 rovers' position
     [returnCode,rover_0]=vrep.simxGetObjectHandle(clientID,strcat('rover'),vrep.simx_opmode_blocking);
@@ -57,16 +52,90 @@ if (clientID>-1)
     [returnCode,cuboid_5]=vrep.simxGetObjectPosition(clientID,Cuboid15,-1,vrep.simx_opmode_blocking);
     
     %Get formation
-    [destination, roverID] = formation_5_LUA(position(:,1),position(:,2),u,v);
+    [destination, roverID] = formation_3_LUA(position([1 2 3],1),position([1 2 3],2),u,v);
     
     %obstacle (raw for No., column for x/y coordinate)
     obstacle = [cuboid_1(1), cuboid_2(1), cuboid_3(1),cuboid_4(1), cuboid_5(1);
         cuboid_1(2), cuboid_2(2), cuboid_3(2), cuboid_4(2), cuboid_5(2)];
+    
 
     
-    for i = 1:40
-        tic
+    for i = 1:30
+       
+        %Get 5 rovers' position
+        [returnCode,rover_0]=vrep.simxGetObjectHandle(clientID,strcat('rover'),vrep.simx_opmode_blocking);
+        [returnCode,position_0]=vrep.simxGetObjectPosition(clientID,rover_0,-1,vrep.simx_opmode_blocking);
+        [returnCode,rover_1]=vrep.simxGetObjectHandle(clientID,strcat('rover#0'),vrep.simx_opmode_blocking);
+        [returnCode,position_1]=vrep.simxGetObjectPosition(clientID,rover_1,-1,vrep.simx_opmode_blocking);
+        [returnCode,rover_2]=vrep.simxGetObjectHandle(clientID,strcat('rover#1'),vrep.simx_opmode_blocking);
+        [returnCode,position_2]=vrep.simxGetObjectPosition(clientID,rover_2,-1,vrep.simx_opmode_blocking);
+        [returnCode,rover_3]=vrep.simxGetObjectHandle(clientID,strcat('rover#2'),vrep.simx_opmode_blocking);
+        [returnCode,position_3]=vrep.simxGetObjectPosition(clientID,rover_3,-1,vrep.simx_opmode_blocking);
+        [returnCode,rover_4]=vrep.simxGetObjectHandle(clientID,strcat('rover#3'),vrep.simx_opmode_blocking);
+        [returnCode,position_4]=vrep.simxGetObjectPosition(clientID,rover_4,-1,vrep.simx_opmode_blocking);
         
+        position = [position_0; position_1; position_2; position_3; position_4];
+        
+        %Get formation
+        [destination, roverID] = formation_3_LUA(position([1 2 3],1),position([1 2 3],2),u,v);
+        
+        %obstacle (raw for No., column for x/y coordinate)
+        obstacle_1 = [obstacle(1,:), position([2 3 4 5],1)';
+            obstacle(2,:), position([2 3 4 5],2)'];
+        obstacle_2 = [obstacle(1,:), position([1 3 4 5],1)';
+            obstacle(2,:), position([1 3 4 5],2)'];
+        obstacle_3 = [obstacle(1,:), position([1 2 4 5],1)';
+            obstacle(2,:), position([1 2 4 5],2)'];
+        obstacle_4 = [obstacle(1,:), position([1 2 3 5],1)';
+            obstacle(2,:), position([1 2 3 5],2)'];
+        obstacle_5 = [obstacle(1,:), position([1 2 3 4],1)';
+            obstacle(2,:), position([1 2 3 4],2)'];
+        
+        %Calculate Path
+        %rover 1
+        path_1 = Path([position_0(1);position_0(2)],[destination(roverID(1),1);destination(roverID(1),2)],obstacle_1);
+        %rover 2
+        path_2 = Path([position_1(1);position_1(2)],[destination(roverID(2),1);destination(roverID(2),2)],obstacle_2);
+        %rover 3
+        path_3 = Path([position_2(1);position_2(2)],[destination(roverID(3),1);destination(roverID(3),2)],obstacle_3);
+     
+        %Running rovers
+        a=[path_1(1,1),path_1(2,1),0,path_2(1,1),path_2(2,1),0,path_3(1,1),path_3(2,1),0,position(4,1),position(4,2),0,position(5,1),position(5,2),0];
+        packedData=vrep.simxPackFloats(a);
+        [returnCode]=vrep.simxWriteStringStream(clientID,'stringname',packedData,vrep.simx_opmode_oneshot);
+        
+        
+    end
+    
+    disp('Reached formation');
+    
+    pause
+    
+    %------------------------------5 Rovers-------------------------------%
+    
+    %Square
+    u = [-2;2;0;-2;2];
+    v = [-2;-2;0;2;2];
+    
+    %Get 5 rovers' position
+    [returnCode,rover_0]=vrep.simxGetObjectHandle(clientID,strcat('rover'),vrep.simx_opmode_blocking);
+    [returnCode,position_0]=vrep.simxGetObjectPosition(clientID,rover_0,-1,vrep.simx_opmode_blocking);
+    [returnCode,rover_1]=vrep.simxGetObjectHandle(clientID,strcat('rover#0'),vrep.simx_opmode_blocking);
+    [returnCode,position_1]=vrep.simxGetObjectPosition(clientID,rover_1,-1,vrep.simx_opmode_blocking);
+    [returnCode,rover_2]=vrep.simxGetObjectHandle(clientID,strcat('rover#1'),vrep.simx_opmode_blocking);
+    [returnCode,position_2]=vrep.simxGetObjectPosition(clientID,rover_2,-1,vrep.simx_opmode_blocking);
+    [returnCode,rover_3]=vrep.simxGetObjectHandle(clientID,strcat('rover#2'),vrep.simx_opmode_blocking);
+    [returnCode,position_3]=vrep.simxGetObjectPosition(clientID,rover_3,-1,vrep.simx_opmode_blocking);
+    [returnCode,rover_4]=vrep.simxGetObjectHandle(clientID,strcat('rover#3'),vrep.simx_opmode_blocking);
+    [returnCode,position_4]=vrep.simxGetObjectPosition(clientID,rover_4,-1,vrep.simx_opmode_blocking);
+    
+    position = [position_0; position_1; position_2; position_3; position_4];
+
+    %Get formation
+    [destination, roverID] = formation_5_LUA(position(:,1),position(:,2),u,v);
+    
+    for i = 1:35
+
         %Get 5 rovers' position
         [returnCode,rover_0]=vrep.simxGetObjectHandle(clientID,strcat('rover'),vrep.simx_opmode_blocking);
         [returnCode,position_0]=vrep.simxGetObjectPosition(clientID,rover_0,-1,vrep.simx_opmode_blocking);
@@ -113,12 +182,7 @@ if (clientID>-1)
         packedData=vrep.simxPackFloats(a);
         [returnCode]=vrep.simxWriteStringStream(clientID,'stringname',packedData,vrep.simx_opmode_oneshot);
         
-        %Judging
-        tak = toc;
-        
     end
-    
-    
     
 else
     disp('Failed connecting to remote API server');

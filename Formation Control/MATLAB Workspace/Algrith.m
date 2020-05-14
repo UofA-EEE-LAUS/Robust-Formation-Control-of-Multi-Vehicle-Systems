@@ -1,10 +1,10 @@
 function [ output ] = Algrith( curr,over,obstacle )
 %Compute function 
 
-k_att=10; % gain factor of attractive force
+k_att=.5; % gain factor of attractive force
 repu=0;  % initilize the repulsion 
-k_rep=100; % gain factor of the repulsive force 
-detection=0.5;  % the obstacle avidance reaction range, if the distance between obstacle and robot is smaller than the range, then repulsion affcet its movement, otherwise repulsion is 0
+k_rep=.5; % gain factor of the repulsive force 
+detection=.3;  % the obstacle avoidance reaction range, if the distance between obstacle and robot is smaller than the range, then repulsion affcet its movement, otherwise repulsion is 0
 
 % the traction function 
 attr=1/2*k_att*(norm(curr-over))^2; % compute the traction function
