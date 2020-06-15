@@ -1,0 +1,13 @@
+Detection files:
+ATF for Alpha trimmer filter
+Kalman filter for kalman filter
+CF for Complementary filter
+Framebyframe for Object classification by YOLOv3
+Py_vrep is the main script
+
+Cfg files and weights files are too large for Git, you can find them on my google drive here:
+Tiny weights are for YOLOv3 tiny, these are really useful for CPU only operation
+if you have a Nvidia GPU, you can use the full weights for increased detection rates
+
+
+https://drive.google.com/drive/folders/1XGdIBCNKvcwxx8b8_WsKgVNoFWC7HGeA?usp=sharing
