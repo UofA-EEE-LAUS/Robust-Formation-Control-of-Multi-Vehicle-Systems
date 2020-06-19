@@ -1,6 +1,6 @@
 function [ X, Y ] = simulate( sys, x0, y0, u, v )
 
-    T=0:0.1:100;
+    T=0:0.1:0.5;
 
     % Concatenate X and Y coordinates
     X0=[x0;y0];

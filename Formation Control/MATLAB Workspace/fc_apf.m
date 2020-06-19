@@ -9,18 +9,18 @@ vrep.simxFinish(-1);
 clientID=vrep.simxStart('127.0.0.1',19999,true,true,5000,5);
 
 %Formation Setting
-% %Straight Line
-% u = [-2;-1;0;1;2];
-% v = [-2;-1;0;1;2];
+% Straight Line
+u = [-2;-1;0;1;2];
+v = [-2;-1;0;1;2];
 % %Square
 % u = [-2;2;0;-2;2];
 % v = [-2;-2;0;2;2];
 % %Circle
 % u = [0;-3;3;-2;2];
-% v = [5;2;2;-3;3];
-%Triangle
-u = [-1;1;0;-0.5;0.5];
-v = [0;0;3;2;2];
+% v = [5;2;2;-3;-3];
+% %Triangle
+% u = [-1;1;0;-0.5;0.5];
+% v = [0;0;3;2;2];
 
 
 %clientID is -1 if the connection to the server was NOT possible
@@ -29,6 +29,8 @@ if (clientID>-1)
     elapsedTime = 1;
     
     %------------------------------CODE HERE------------------------------%
+    
+    vrep.simxStartSimulation(clientID,vrep.simx_opmode_oneshot);
     
     %Get 5 rovers' position
     [returnCode,rover_0]=vrep.simxGetObjectHandle(clientID,strcat('rover'),vrep.simx_opmode_blocking);
@@ -65,7 +67,6 @@ if (clientID>-1)
 
     
     for i = 1:40
-        tic
         
         %Get 5 rovers' position
         [returnCode,rover_0]=vrep.simxGetObjectHandle(clientID,strcat('rover'),vrep.simx_opmode_blocking);
@@ -84,6 +85,15 @@ if (clientID>-1)
         %Get formation
         [destination, roverID] = formation_5_LUA(position(:,1),position(:,2),u,v);
         
+        %Judgement
+        if norm(position_0(1:2)-destination(roverID(1),:)) < 0.2 && ...
+                norm(position_1(1:2)-destination(roverID(2),:)) < 0.2 && ...
+                norm(position_2(1:2)-destination(roverID(3),:)) < 0.2 && ...
+                norm(position_3(1:2)-destination(roverID(4),:)) < 0.2 && ...
+                norm(position_4(1:2)-destination(roverID(5),:)) < 0.2
+            break
+        end
+        
         %obstacle (raw for No., column for x/y coordinate)
         obstacle_1 = [obstacle(1,:), position([2 3 4 5],1)';
             obstacle(2,:), position([2 3 4 5],2)'];
@@ -96,29 +106,42 @@ if (clientID>-1)
         obstacle_5 = [obstacle(1,:), position([1 2 3 4],1)';
             obstacle(2,:), position([1 2 3 4],2)'];
         
+        
         %Calculate Path
         %rover 1
-        path_1 = Path([position_0(1);position_0(2)],[destination(roverID(1),1);destination(roverID(1),2)],obstacle_1);
+        path_1 = Path([position_0(1);position_0(2)], ...
+            [destination(roverID(1),1); destination(roverID(1),2)], ...
+            obstacle_1);
         %rover 2
-        path_2 = Path([position_1(1);position_1(2)],[destination(roverID(2),1);destination(roverID(2),2)],obstacle_2);
+        path_2 = Path([position_1(1);position_1(2)], ...
+            [destination(roverID(2),1);destination(roverID(2),2)], ...
+            obstacle_2);
         %rover 3
-        path_3 = Path([position_2(1);position_2(2)],[destination(roverID(3),1);destination(roverID(3),2)],obstacle_3);
+        path_3 = Path([position_2(1);position_2(2)], ...
+            [destination(roverID(3),1);destination(roverID(3),2)], ...
+            obstacle_3);
         %rover 4
-        path_4 = Path([position_3(1);position_3(2)],[destination(roverID(4),1);destination(roverID(4),2)],obstacle_4);
+        path_4 = Path([position_3(1);position_3(2)], ...
+            [destination(roverID(4),1);destination(roverID(4),2)], ...
+            obstacle_4);
         %rover 5
-        path_5 = Path([position_4(1);position_4(2)],[destination(roverID(5),1);destination(roverID(5),2)],obstacle_5);
+        path_5 = Path([position_4(1);position_4(2)], ...
+            [destination(roverID(5),1); ...
+            destination(roverID(5),2)],obstacle_5);
         
         %Running rovers
-        a=[path_1(1,1),path_1(2,1),0,path_2(1,1),path_2(2,1),0,path_3(1,1),path_3(2,1),0,path_4(1,1),path_4(2,1),0,path_5(1,1),path_5(2,1),0];
+        a=[path_1(1,1),path_1(2,1),0, ...
+            path_2(1,1),path_2(2,1),0, ...
+            path_3(1,1),path_3(2,1),0, ...
+            path_4(1,1),path_4(2,1),0, ...
+            path_5(1,1),path_5(2,1),0];
         packedData=vrep.simxPackFloats(a);
         [returnCode]=vrep.simxWriteStringStream(clientID,'stringname',packedData,vrep.simx_opmode_oneshot);
         
-        %Judging
-        tak = toc;
         
     end
     
-    
+    vrep.simxPauseSimulation(clientID,vrep.simx_opmode_oneshot_wait);
     
 else
     disp('Failed connecting to remote API server');

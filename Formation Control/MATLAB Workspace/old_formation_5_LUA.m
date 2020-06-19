@@ -66,5 +66,5 @@ L=laplacian(A);
 sys=system_formation(L);
 [X,Y] = simulate(sys, xs, ys, u, v);
 
-position = [X(5, :)',Y(5, :)'];
+position = [X(1001, :)',Y(1001, :)'];
 end

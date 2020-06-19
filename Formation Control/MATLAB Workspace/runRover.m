@@ -12,7 +12,7 @@ position_y=position(:,2);
 if (abs(position_x-x) >= threshold || abs(position_y-y) >= threshold)
     rover_radius = 15;
     wheel_radius = 5.22;
-    dphi = 0/ 180 * pi;
+    dphi = 0 / 180 * pi;
     phi = 0;
     
     %control
