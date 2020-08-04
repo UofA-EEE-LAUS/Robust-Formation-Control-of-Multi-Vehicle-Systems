@@ -4,3 +4,5 @@ This is an example of multiple 3WD simuation.
 Please make sure that all files are downloaded to the same folder.
 
 Run the Vrep "scene_26-3-20_2", then MATLAB script for "MoveSpin".
+
+For Vrep, https://www.coppeliarobotics.com/downloads
