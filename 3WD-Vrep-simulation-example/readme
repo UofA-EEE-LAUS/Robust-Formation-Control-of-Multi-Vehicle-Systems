@@ -6,3 +6,20 @@ Please make sure that all files are downloaded to the same folder.
 Run the Vrep "scene_26-3-20_2", then MATLAB script for "MoveSpin".
 
 For Vrep, https://www.coppeliarobotics.com/downloads
+
+
+
+
+
+**********************************Installation*****************************************
+Virtual Robot Experimentation Platform (V-REP)
+
+This project uses V-REP release 3.6.2, an open source robotics prototyping and simulation software package.
+As of 26/11/2019, V-REP has been superseeded by CopelliaSim.
+V-REP is still downloadable at the time of writing and all .ttt files should be forwards compatible with CopelliaSim.
+Available for free at https://www.coppeliarobotics.com/downloads
+MATLAB
+
+For the RemoteAPI to V-REP, this project has chosen MATLAB.
+The project is currently using release 2019a, however 2019b should be used soon.
+Available at: https://mathworks.com/products/matlab.html
